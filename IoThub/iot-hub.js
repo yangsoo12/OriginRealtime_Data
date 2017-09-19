@@ -1,48 +1,125 @@
-/*
- * IoT Gateway BLE Script - Microsoft Sample Code - Copyright (c) 2016 - Licensed MIT
- */
-'use strict';
+<html>
 
-var EventHubClient = require('azure-event-hubs').Client;
+<head>
+    <title>Temperature &amp; Humidity live data</title>
+    <script src="javascripts/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="javascripts/Chart.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="javascripts/index.js" type="text/javascript" charset="utf-8"></script>
+    <link href="stylesheets/style.css" rel="stylesheet" />
+</head>
 
-// Close connection to IoT Hub.
-IoTHubReaderClient.prototype.stopReadMessage = function() {
-  this.iotHubClient.close();
-}
+<body>
+    <canvas id="myChart" width="400" height="150"></canvas>
+<!------------------------------------------------------------------------>
+	<div id="g5"></div>   
+    <script src="raphael-2.1.4.min.js"></script>
+    <!--<script src="../justgage-1.0.1.js"></script>-->
+    <script src="justgage.js"></script>
+    <script>
+	var aa;
+    document.addEventListener("DOMContentLoaded", function(event) {
 
-// Read device-to-cloud messages from IoT Hub.
-IoTHubReaderClient.prototype.startReadMessage = function(cb) {
-  var printError = function(err) {
-    console.error(err.message || err);
-  };
+      var g5;
+	  aa = document.getElementById("pm10").innerHTML;
 
-  var deviceId = process.env['Azure.IoT.IoTHub.DeviceId'];
+      var g5 = new JustGage({
+        id: "g5",
+        value: parseInt(aa),
+        min: 0,
+        max: 100,
+        title: "pm10",
+        label: "",
+        startAnimationTime: 2000,
+        startAnimationType: ">",
+        refreshAnimationTime: 1000,
+        refreshAnimationType: "bounce"
+      });
 
-  this.iotHubClient.open()
-    .then(this.iotHubClient.getPartitionIds.bind(this.iotHubClient))
-    .then(function(partitionIds) {
-      return partitionIds.map(function(partitionId) {
-        return this.iotHubClient.createReceiver(this.consumerGroupName, partitionId, {
-          'startAfterTime': Date.now()
-        })
-        .then(function(receiver) {
-          receiver.on('errorReceived', printError);
-          receiver.on('message', (message) => {
-            var from = message.annotations['iothub-connection-device-id'];
-            if (deviceId && deviceId !== from) {
-              return;
-            }
-            cb(message.body, Date.parse(message.enqueuedTimeUtc));
-          });
-        }.bind(this));
-      }.bind(this));
-    }.bind(this))
-    .catch(printError);
-}
+      
 
-function IoTHubReaderClient(connectionString, consumerGroupName) {
-  this.iotHubClient = EventHubClient.fromConnectionString(connectionString);
-  this.consumerGroupName = consumerGroupName;
-}
+    });
+    </script>
+	
+<!------------------------------------------------------------------------>
 
-module.exports = IoTHubReaderClient;
+
+<!------------------------------------------------------------------------>
+	<div id="g6"></div>   
+    <script src="raphael-2.1.4.min.js"></script>
+    <!--<script src="../justgage-1.0.1.js"></script>-->
+    <script src="justgage.js"></script>
+    <script>
+
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+
+      var g5;
+
+	  aa = document.getElementById("pm2").innerHTML;
+      var g5 = new JustGage({
+        id: "g6",
+        value: parseInt(aa),
+        min: 0,
+        max: 100,
+        title: "pm2.5",
+        label: "",
+        startAnimationTime: 2000,
+        startAnimationType: ">",
+        refreshAnimationTime: 1000,
+        refreshAnimationType: "bounce"
+      });
+
+      
+
+    });
+    </script>
+<!------------------------------------------------------------------------>
+
+<!------------------------------------------------------------------------>
+	<div id="g7"></div>   
+    <script src="raphael-2.1.4.min.js"></script>
+    <!--<script src="../justgage-1.0.1.js"></script>-->
+    <script src="justgage.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+
+      var g5;
+
+	  aa = document.getElementById("temp").innerHTML;
+      var g5 = new JustGage({
+        id: "g7",
+        value: parseInt(aa),
+        min: 0,
+        max: 100,
+        title: "Temperature",
+        label: "",
+        startAnimationTime: 2000,
+        startAnimationType: ">",
+        refreshAnimationTime: 1000,
+        refreshAnimationType: "bounce"
+      });
+
+      
+
+    });
+    </script>
+	<table>
+	<tr><td>
+	<div id="g5"></div>  
+	</td>
+	<td>
+	<div id="g5"></div>  
+	</td>
+	<td>
+	<div id="g5"></div>  
+	</td></tr>
+	</table>
+
+<!------------------------------------------------------------------------>
+
+    <p id="pm2"></p>
+    <p id="pm10"></p>
+	<p id="temp"></p>
+</body>
+
+</html>
